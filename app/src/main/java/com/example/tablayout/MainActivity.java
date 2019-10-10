@@ -1,22 +1,15 @@
 package com.example.tablayout;
 
+import android.os.Bundle;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
-
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.google.android.material.tabs.TabLayout;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity {
-
     VpAdapter vpAdapter;
     @BindView(R.id.tv_toolbar)
     TextView tvToolbar;
@@ -32,25 +25,22 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
         initView();
     }
 
-    void initView() {
+    void initView(){
         vpAdapter = new VpAdapter(getSupportFragmentManager());
+
         //fragment
         HomeFragment mHomeFragment = new HomeFragment();
         ProfileFragment mProfileFragment = new ProfileFragment();
         NotificationFragment mNotificationFragment = new NotificationFragment();
-        vpAdapter.addFragment(mHomeFragment, "");
-        vpAdapter.addFragment(mProfileFragment, "");
-        vpAdapter.addFragment(mNotificationFragment, "");
+
+        vpAdapter.addFragment(mHomeFragment,"Home");
+        vpAdapter.addFragment(mProfileFragment,"Profile");
+        vpAdapter.addFragment(mNotificationFragment,"Notifikasi");
         viewPagerMenu.setAdapter(vpAdapter);
-// ic_launcher_background bisa diganti dengan gambar yang sudah diimport
-        tabLayoutMenu.addTab(tabLayoutMenu.newTab().setIcon(R.drawable.ic_launcher_background).setText("Home"));
-
-        tabLayoutMenu.addTab(tabLayoutMenu.newTab().setIcon(R.drawable.ic_launcher_background).setText("Profile"));
-
-        tabLayoutMenu.addTab(tabLayoutMenu.newTab().setIcon(R.drawable.ic_launcher_background).setText("Notifikasi"));
         tabLayoutMenu.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -59,28 +49,17 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
+
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+
             }
         });
-        inflateDivider();
+        //inflateDivider();
+        tabLayoutMenu.setupWithViewPager(viewPagerMenu);
+
     }
 
-    void inflateDivider() {
-        for (int i = 0; i < tabLayoutMenu.getTabCount(); i++) {
-            TabLayout.Tab tab = tabLayoutMenu.getTabAt(i);
-            RelativeLayout relativeLayout = (RelativeLayout)
-                    LayoutInflater.from(this).inflate(R.layout.tab_layout,
-                            tabLayoutMenu, false);
-            TextView tabTextView = (TextView)
-                    relativeLayout.findViewById(R.id.tab_title);
-            ImageView imageView = (ImageView)
-                    relativeLayout.findViewById(R.id.img_tab);
-            tabTextView.setText(tab.getText());
-            imageView.setImageDrawable(tab.getIcon());
-            tab.setCustomView(relativeLayout);
-        }
-    }
 }
